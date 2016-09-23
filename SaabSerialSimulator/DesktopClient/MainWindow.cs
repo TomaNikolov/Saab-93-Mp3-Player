@@ -96,5 +96,14 @@
 
 			this.rtbOutgoing.Text = string.Empty;
 		}
+
+		private void Btn_Change_song(object sender, EventArgs e)
+		{
+			if (comPort.IsOpen)
+			{
+				var message = ((Button) sender).Text;
+				comPort.Write(message);
+			}
+		}
 	}
 }
