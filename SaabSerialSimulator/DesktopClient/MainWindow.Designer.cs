@@ -35,6 +35,10 @@
 			this.rtbOutgoing = new System.Windows.Forms.RichTextBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.btnPortState = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button4 = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// rtbIncoming
@@ -100,11 +104,59 @@
 			this.btnPortState.UseVisualStyleBackColor = true;
 			this.btnPortState.Click += new System.EventHandler(this.btnPortState_Click);
 			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(422, 76);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(75, 23);
+			this.button2.TabIndex = 17;
+			this.button2.Text = "nextSong";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Visible = true;
+			this.button2.Click += new System.EventHandler(this.Btn_Change_song);
+			// 
+			// button3
+			// 
+			this.button3.Location = new System.Drawing.Point(422, 123);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(75, 23);
+			this.button3.TabIndex = 18;
+			this.button3.Text = "nextDir";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Visible = true;
+			this.button3.Click += new System.EventHandler(this.Btn_Change_song);
+			// 
+			// button4
+			// 
+			this.button4.Location = new System.Drawing.Point(503, 76);
+			this.button4.Name = "button4";
+			this.button4.Size = new System.Drawing.Size(75, 23);
+			this.button4.TabIndex = 19;
+			this.button4.Text = "prevSong";
+			this.button4.UseVisualStyleBackColor = true;
+			this.button4.Visible = true;
+			this.button4.Click += new System.EventHandler(this.Btn_Change_song);
+			// 
+			// button5
+			// 
+			this.button5.Location = new System.Drawing.Point(503, 123);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(75, 23);
+			this.button5.TabIndex = 20;
+			this.button5.Text = "prevDir";
+			this.button5.UseVisualStyleBackColor = true;
+			this.button5.Visible = true;
+			this.button5.Click += new System.EventHandler(this.Btn_Change_song);
+			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(532, 408);
+			this.ClientSize = new System.Drawing.Size(567, 408);
+			this.Controls.Add(this.button5);
+			this.Controls.Add(this.button4);
+			this.Controls.Add(this.button3);
+			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.rtbOutgoing);
 			this.Controls.Add(this.btnPortState);
@@ -126,6 +178,10 @@
 		private System.Windows.Forms.RichTextBox rtbOutgoing;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Button btnPortState;
+		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button button5;
 	}
 }
 
