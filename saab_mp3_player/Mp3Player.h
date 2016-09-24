@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <SdFat.h>
+
 class Mp3Player {
   public:
     void init();
@@ -6,6 +9,7 @@ class Mp3Player {
     void nextDir();
     void prevDir();
     void loopSongs();
-  // private: 
-  //   int8_t getNext(uint8_t flags, uint8_t indent);
+    void fillSongs(uint8_t flags, uint8_t indent, SdBaseFile *sdBaseFile);
+  private: 
+    uint8_t getNext(uint8_t flags, uint8_t indent, SdBaseFile *sdBaseFile);
 };

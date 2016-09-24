@@ -3,15 +3,13 @@
 
 Mp3Player Mp3player;
 
-char buffer[6]; // 0-35K+null
-
 void setup() {
   Serial.begin(115200);
   Mp3player.init();
 }
 
 void loop() {
-  Mp3player.loopSongs();
+ // Mp3player.loopSongs();
   while(Serial.available()) {
     String message = Serial.readString();// read the incoming data as string 
     parceMenu(message);
@@ -29,6 +27,8 @@ void parceMenu(String message){
       Mp3player.nextDir();
     } else if(message == "prevDir"){
       Mp3player.prevDir();
+    } else if(message == "readDir"){
+      Mp3player.fillSongs(4, 0, NULL);
     }
 }
 
