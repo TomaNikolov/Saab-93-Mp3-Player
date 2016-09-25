@@ -1,14 +1,17 @@
 #include "MP3Player.h"
+#include "List.h"
 #include <SdFat.h>
 #include <SFEMP3Shield.h>
 #include <stdint.h>
+#include <string.h>
 
+List list;
 SFEMP3Shield MP3player;
 SdFat sd;
-String dirs[3][29];
+
 uint8_t currentDir;
 uint8_t currentSong;
-char *currentIndent = "";
+char* currentIndent = "";
 
 void Mp3Player::init(){
   uint8_t result; //result code from some function as to be tested at later time.
@@ -38,6 +41,13 @@ void Mp3Player::init(){
   }
   SdBaseFile *sdBaseFile = sd.vwd();
   fillSongs(LS_R, 0, sdBaseFile);
+  char** arr2 = list.init();
+   for(int i = 0; i <sizeof(arr2); i++){
+       for(int j = 0; j <sizeof(arr2[i]); j++){
+        Serial.print((char)arr2[i][j]);
+    }
+       Serial.println("as\n");
+    }
 }
 
 void Mp3Player::nextDir(){
@@ -91,7 +101,6 @@ void Mp3Player::fillSongs(uint8_t flags, uint8_t indent, SdBaseFile *sdBaseFile)
             uint16_t index = sdBaseFile->curPosition()/32 - 1;
             SdBaseFile s;
             if (s.open(sdBaseFile, index, O_READ)) {
-                Serial.println("inside");
                 fillSongs(flags, indent + 1, &s);
             }
             s.seekSet(32 * (index + 1));
@@ -99,10 +108,9 @@ void Mp3Player::fillSongs(uint8_t flags, uint8_t indent, SdBaseFile *sdBaseFile)
     }
 }
 
-uint8_t song = 0;
 uint8_t Mp3Player::getNext(uint8_t flags, uint8_t indent,  SdBaseFile *sdBaseFile) {
   dir_t dir;
-  uint8_t w = 0;
+  
   
   while (1) {
     if (sdBaseFile->read(&dir, sizeof(dir)) != sizeof(dir)) return 0;
@@ -111,32 +119,48 @@ uint8_t Mp3Player::getNext(uint8_t flags, uint8_t indent,  SdBaseFile *sdBaseFil
     if (dir.name[0] != DIR_NAME_DELETED && dir.name[0] != '.'
       && DIR_IS_FILE_OR_SUBDIR(&dir)) break;
   }
+  
   // indent for dir level
   for (uint8_t i = 0; i < indent; i++) Serial.print(' ');
 
   // print name
+  char songsOrFolder[12];
   for (uint8_t i = 0; i < 11; i++) {
     if (dir.name[i] == ' ')continue;
     if (i == 8) {
-      //Serial.print('.');
-      w++;
+     // Serial.print('.');
+     songsOrFolder[i] = '.';
     }
+    songsOrFolder[i] = dir.name[i];
     //Serial.print((char)dir.name[i]);
-    w++;
+   
   }
   if (DIR_IS_SUBDIR(&dir)) {
-    //Serial.print('/');
-    currentIndent = dir.name + '/';
-    song = 0;
-    w++;
+
+    for(int i = 0; i <sizeof(songsOrFolder); i++){
+       Serial.print((char)songsOrFolder[i]);
+    }
+     Serial.print('/');
+     Serial.println();
+    list.add(songsOrFolder);
   } else {
-      char *str;
-      strcat(currentIndent, str);
-      strcat(dir.name, str);
-      dirs[indent][song] = str;
-      song++;
-       Serial.println(dirs[indent][song]);
+     
   }
-   Serial.println();
+  // Serial.println();
   return DIR_IS_FILE(&dir) ? 1 : 2;
+}
+
+char* Mp3Player::concatStr(char* firstStr, char* secondStr) {
+    uint8_t firstStrSize = getArrLength(firstStr);
+    int secondStrSize = getArrLength(secondStr);
+    int length = firstStrSize + secondStrSize;
+    char* result = malloc(length);
+    strcat(result, firstStr);
+    strcat(result, secondStr);
+
+    return result;
+}
+
+uint8_t Mp3Player::getArrLength(char* arr){
+    return sizeof(arr) / sizeof(char);
 }
