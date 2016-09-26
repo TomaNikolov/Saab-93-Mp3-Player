@@ -41,12 +41,13 @@ void Mp3Player::init(){
   }
   SdBaseFile *sdBaseFile = sd.vwd();
   fillSongs(LS_R, 0, sdBaseFile);
-  char** arr2 = list.init();
+  char** arr2 = list.get();
+
    for(int i = 0; i <sizeof(arr2); i++){
        for(int j = 0; j <sizeof(arr2[i]); j++){
-        Serial.print((char)arr2[i][j]);
-    }
-       Serial.println("as\n");
+        Serial.print(arr2[i][j]);
+   }
+       Serial.println();
     }
 }
 
@@ -124,7 +125,7 @@ uint8_t Mp3Player::getNext(uint8_t flags, uint8_t indent,  SdBaseFile *sdBaseFil
   for (uint8_t i = 0; i < indent; i++) Serial.print(' ');
 
   // print name
-  char songsOrFolder[12];
+  char songsOrFolder[30];
   for (uint8_t i = 0; i < 11; i++) {
     if (dir.name[i] == ' ')continue;
     if (i == 8) {
@@ -138,10 +139,11 @@ uint8_t Mp3Player::getNext(uint8_t flags, uint8_t indent,  SdBaseFile *sdBaseFil
   if (DIR_IS_SUBDIR(&dir)) {
 
     for(int i = 0; i <sizeof(songsOrFolder); i++){
-       Serial.print((char)songsOrFolder[i]);
+     //  Serial.print(songsOrFolder[i]);
     }
-     Serial.print('/');
-     Serial.println();
+    // Serial.print('/');
+    // Serial.println();
+    //songsOrFolder[8] = '\0';
     list.add(songsOrFolder);
   } else {
      
