@@ -1,6 +1,6 @@
 class List {
   public:
-    char** init();
+    char** get();
     void add(char* element);
   private:
     void resize();

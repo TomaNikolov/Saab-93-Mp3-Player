@@ -11,7 +11,7 @@
 char* arr[4];
 uint8_t currentIndex = 0;
 
-char** List::init(){
+char** List::get(){
     return arr;
 }
 
