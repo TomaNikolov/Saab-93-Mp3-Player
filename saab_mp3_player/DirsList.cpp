@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
-#include "List.h"
+#include "DirsList.h"
 
 #include <SdFat.h>
 #include <SFEMP3Shield.h>
@@ -11,11 +11,16 @@
 char* arr[4];
 uint8_t currentIndex = 0;
 
-char** List::get(){
+
+char** DirsList::get(){
     return arr;
 }
 
-void List::add(char* element){
+uint8_t DirsList::count(){
+    return currentIndex;
+}
+
+void DirsList::add(char* element){
     if(shouldResize()){
         resize();
     }
@@ -24,18 +29,18 @@ void List::add(char* element){
     currentIndex++;
 }
 
-void List::resize(){
+void DirsList::resize(){
     uint8_t length = 2 * currentIndex;
     char* result[length];
     memcpy(result, arr, length);
-
+    free(arr);
     **arr = &result;
 }
 
-bool List::shouldResize(){
+bool DirsList::shouldResize(){
     return currentIndex >= listSize();
 }
 
-uint8_t List::listSize(){
+uint8_t DirsList::listSize(){
     return sizeof(arr);
 }
