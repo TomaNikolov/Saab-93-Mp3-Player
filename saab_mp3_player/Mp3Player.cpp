@@ -116,11 +116,11 @@ uint8_t Mp3Player::getNextDir(uint8_t flags, uint8_t indent,  SdBaseFile *sdBase
   }
   
   // indent for dir level
-  for (uint8_t i = 0; i < indent; i++) Serial.print(' ');
+  //for (uint8_t i = 0; i < indent; i++) Serial.print(' ');
 
   // print name
   //char songsOrFolder;
-  char* songsOrFolder = (char*)malloc(20);
+  char* songsOrFolder = (char*)malloc(10);
 
   for (uint8_t i = 0; i < 8; i++) {
     if (dir.name[i] == ' ')continue;
@@ -133,12 +133,10 @@ uint8_t Mp3Player::getNextDir(uint8_t flags, uint8_t indent,  SdBaseFile *sdBase
     songsOrFolder[8] = '/';
     songsOrFolder[9] = '\0';
     dirsList.add(songsOrFolder);
-    Serial.print("dir name: ");
-    Serial.println(songsOrFolder);
   } else {
      free(songsOrFolder);
   }
-  // Serial.println();
+
   return DIR_IS_FILE(&dir) ? 1 : 2;
 }
 
@@ -155,7 +153,7 @@ void Mp3Player::fillSongs(uint8_t flags, char* path){
   
   while (status = getNextSong(flags, &s)) {
     Serial.print("Free ram:  ");
-      Serial.println(freeMemory());
+    Serial.println(freeMemory());
   }
 }
 
@@ -169,22 +167,23 @@ uint8_t Mp3Player::getNextSong(uint8_t flags, SdBaseFile *sdBaseFile) {
       && DIR_IS_FILE_OR_SUBDIR(&dir)) break;
   }
 
-  if (songsList.count() > 5) return;
-  char* song = (char*)malloc(20);
+  //Not enough memory
+  if (songsList.count() > 2) return;
+  char* song = (char*)malloc(14);
   for (uint8_t i = 0; i < 8; i++) {
     if (dir.name[i] == ' ')continue;
     song[i] = dir.name[i];
   }
   if (DIR_IS_SUBDIR(&dir)) {
-     Serial.println("dir");
+    //
   } else {
       song[8] = '.';
       song[9] = 'M';
       song[10] = 'P';
       song[11] = '3';
       song[12] = '\0';
-     Serial.println(song);
      songsList.add(song);
+     Serial.println(song);
   }
  
   return DIR_IS_FILE(&dir) ? 1 : 2;
@@ -192,28 +191,30 @@ uint8_t Mp3Player::getNextSong(uint8_t flags, SdBaseFile *sdBaseFile) {
 
 char* Mp3Player::concatStr(char* firstStr, char* secondStr) {
     uint8_t firstStrSize = getArrLength(firstStr);
-    int secondStrSize = getArrLength(secondStr);
-    int length = firstStrSize + secondStrSize;
-    char* result = malloc(length);
-    strcat(result, firstStr);
+    uint8_t secondStrSize = getArrLength(secondStr);
+    uint8_t length = firstStrSize + secondStrSize;
+    Serial.print("concatStr size: ");
+    Serial.println(length);
+    char* result = malloc(length + 1);
+    strcpy(result, firstStr);
     strcat(result, secondStr);
-
+    result[length] = '\0';
     return result;
 }
 
 uint8_t Mp3Player::getArrLength(char* arr){
-    return sizeof(arr) / sizeof(char);
+    return strlen(arr);
 }
 
 void Mp3Player::changeDir(int8_t move){
     currentDir += move;
 
-    if(currentDir > dirsList.count()){
+    if(currentDir >= dirsList.count()){
         currentDir = 0;
     }
 
     if(currentDir < 0 ){
-        currentDir = dirsList.count();
+        currentDir = dirsList.count() - 1;
     }
     
     currentSong = 0;
@@ -224,7 +225,7 @@ void Mp3Player::changeDir(int8_t move){
 void Mp3Player::changeSong(int8_t move) {
     currentSong += move;
 
-    if(currentSong > songsList.count()){
+    if(currentSong >= songsList.count()){
         changeDir(1);
     }
 
@@ -238,6 +239,7 @@ void Mp3Player::play(){
     char** dirs = dirsList.get();
     char** songs = songsList.get();
     char* songPath = concatStr(dirs[currentDir], songs[currentSong]);
+    Serial.print("Song path: ");
     Serial.println(songPath);
     MP3player.playMP3(songPath);
     free(songPath);
