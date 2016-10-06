@@ -211,12 +211,12 @@ uint8_t Mp3Player::getArrLength(char* arr){
 void Mp3Player::changeDir(int8_t move){
     currentDir += move;
 
-    if(currentDir > dirsList.count()){
+    if(currentDir >= dirsList.count()){
         currentDir = 0;
     }
 
     if(currentDir < 0 ){
-        currentDir = dirsList.count();
+        currentDir = dirsList.count() - 1;
     }
     
     currentSong = 0;
@@ -227,7 +227,7 @@ void Mp3Player::changeDir(int8_t move){
 void Mp3Player::changeSong(int8_t move) {
     currentSong += move;
 
-    if(currentSong > songsList.count()){
+    if(currentSong >= songsList.count()){
         changeDir(1);
     }
 
