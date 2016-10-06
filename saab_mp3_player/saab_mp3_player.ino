@@ -28,7 +28,7 @@ void parceMenu(String message){
     } else if(message == "prevDir"){
       Mp3player.prevDir();
     } else if(message == "readDir"){
-      Mp3player.fillSongs(4, 0, NULL);
+      Mp3player.fillDirs(4, 0, NULL);
     }
 }
 

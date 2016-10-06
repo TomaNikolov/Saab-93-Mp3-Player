@@ -49,6 +49,8 @@ void Mp3Player::init(){
   fillSongs(LS_R, arr2[currentDir]);
   logToSerial();
   play();
+
+// MP3player.playMP3("1998-S~1/01-SUI~1.MP3");
 }
 
 void Mp3Player::nextDir(){
@@ -120,7 +122,7 @@ uint8_t Mp3Player::getNextDir(uint8_t flags, uint8_t indent,  SdBaseFile *sdBase
 
   // print name
   //char songsOrFolder;
-  char* songsOrFolder = (char*)malloc(20);
+  char* songsOrFolder = (char*)malloc(10);
 
   for (uint8_t i = 0; i < 8; i++) {
     if (dir.name[i] == ' ')continue;
@@ -169,8 +171,9 @@ uint8_t Mp3Player::getNextSong(uint8_t flags, SdBaseFile *sdBaseFile) {
       && DIR_IS_FILE_OR_SUBDIR(&dir)) break;
   }
 
-  if (songsList.count() > 5) return;
-  char* song = (char*)malloc(20);
+  //Not enough memory
+  if (songsList.count() > 2) return;
+  char* song = (char*)malloc(14);
   for (uint8_t i = 0; i < 8; i++) {
     if (dir.name[i] == ' ')continue;
     song[i] = dir.name[i];
@@ -194,10 +197,10 @@ char* Mp3Player::concatStr(char* firstStr, char* secondStr) {
     uint8_t firstStrSize = getArrLength(firstStr);
     int secondStrSize = getArrLength(secondStr);
     int length = firstStrSize + secondStrSize;
-    char* result = malloc(length);
-    strcat(result, firstStr);
+    char* result = malloc(23);
+    strcpy(result, firstStr);
     strcat(result, secondStr);
-
+    result[23] = '\0';
     return result;
 }
 
@@ -238,6 +241,7 @@ void Mp3Player::play(){
     char** dirs = dirsList.get();
     char** songs = songsList.get();
     char* songPath = concatStr(dirs[currentDir], songs[currentSong]);
+    Serial.print("Song path: ");
     Serial.println(songPath);
     MP3player.playMP3(songPath);
     free(songPath);
